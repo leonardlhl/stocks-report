@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta name="robots" content="noindex, nofollow">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>短線報告 · 可分享</title>
+<style>:root {
+  --bg: #0a0a0f; --card: #12121a; --border: #1e1e2e;
+  --text: #e0e0e0; --muted: #8888a0; --green: #00e676;
+  --red: #ff3d5a; --yellow: #ffc107; --orange: #ff9100;
+  --blue: #448aff; --accent: #00e5ff; --purple: #a371f7; --grey: #888;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { background: var(--bg); }
+body {
+  font-family: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+  background: var(--bg); color: var(--text);
+  padding: 20px; max-width: 860px; margin: auto;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.header { text-align: center; padding: 20px 0; border-bottom: 2px solid var(--border); margin-bottom: 18px; }
+.header h1 { font-size: 26px; color: #fff; }
+.header .info { color: var(--muted); font-size: 13px; margin-top: 4px; }
+.header .strategy { color: var(--orange); font-size: 13px; margin-top: 6px; font-weight: 600; }
+
+.mbar, .act { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.mchip, .actchip {
+  flex: 1; min-width: 90px; background: var(--card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px 12px; text-align: center;
+}
+.mchip .l, .actchip .l { font-size: 10px; color: var(--muted); }
+.mchip .v, .actchip .v { font-size: 16px; font-weight: 700; margin-top: 3px; }
+.actchip { min-width: 160px; text-align: left; }
+.actchip .v { font-size: 15px; }
+.actchip.enter, .actchip.add { border-left: 4px solid var(--green); }
+.actchip.enter .v, .actchip.add .v { color: var(--green); }
+.actchip.reduce { border-left: 4px solid var(--orange); }
+.actchip.reduce .v { color: var(--orange); }
+.actchip.take { border-left: 4px solid var(--accent); }
+.actchip.take .v { color: var(--accent); }
+.actchip.wait { border-left: 4px solid var(--yellow); }
+.actchip.wait .v { color: var(--yellow); }
+
+.sec {
+  text-align: center; padding: 8px 0; margin: 8px 0 14px;
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  font-size: 13px; color: var(--muted); font-weight: 600;
+}
+
+.cal { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; margin-bottom: 16px; }
+.cal-row { display: flex; gap: 10px; padding: 6px 0; border-bottom: 1px solid #1a1a26; font-size: 13px; align-items: baseline; }
+.cal-row:last-child { border-bottom: 0; }
+.cal-date { color: var(--accent); font-weight: 700; min-width: 72px; }
+.cal-type { font-size: 11px; color: var(--muted); min-width: 48px; }
+.cal-soon { color: var(--orange); }
+.hu-head {
+  font-size: 11px; color: var(--orange); font-weight: 700;
+  padding: 10px 0 4px; letter-spacing: 0.04em;
+}
+.hu-head:first-child { padding-top: 2px; }
+.hu-row {
+  display: flex; gap: 10px; padding: 8px 0;
+  border-bottom: 1px solid #1a1a26;
+  font-size: 13px; line-height: 1.55; align-items: flex-start;
+}
+.hu-row:last-of-type { border-bottom: 0; }
+.hu-tag {
+  color: var(--accent); font-weight: 700;
+  min-width: 52px; flex-shrink: 0; padding-top: 1px;
+}
+.hu-text { color: var(--text); }
+.hu-src { font-size: 10px; color: var(--muted); margin-top: 8px; }
+
+.card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 16px; margin-bottom: 12px;
+  display: flex; gap: 14px; align-items: flex-start;
+  page-break-inside: avoid;
+}
+.card.buy { border-left: 4px solid var(--green); }
+.card.wait { border-left: 4px solid var(--yellow); }
+.card.gamble { border-left: 4px solid var(--orange); }
+.card.nogo { border-left: 4px solid var(--grey); opacity: 0.72; }
+.card.watch-card { border-left: 4px solid var(--purple); }
+.card.hold { border-left: 4px solid var(--blue); }
+
+.logo {
+  width: 52px; height: 52px; border-radius: 12px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 900; color: #fff;
+}
+.logo.nvda { background: #76b900; }
+.logo.sndk { background: #e60000; }
+.logo.qqq { background: #3a7bd5; }
+.logo.mu { background: #00539b; }
+.logo.aapl { background: #555; }
+.logo.tsla { background: #e82127; }
+.logo.pltr { background: #111; border: 1px solid #333; }
+.logo.spcx { background: #e67e22; }
+.logo.orcl { background: #c74634; }
+.logo.hsbc { background: #db0011; }
+.logo.tencent { background: #0066cc; }
+.logo.baba { background: #ff6a00; }
+.logo.aia { background: #e31e24; }
+.logo.ccb { background: #003d8f; }
+.logo.smic { background: #b12a2e; }
+.logo.xiaomi { background: #ff6900; }
+.logo.schd { background: #00a3e0; }
+.logo.dram { background: #6b4c9a; }
+.logo.chinalife { background: #8b1e3f; }
+.logo.tlt { background: #1b4f72; }
+
+.info { flex: 1; min-width: 0; }
+.info .title { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 2px; }
+.ticker { font-size: 12px; color: var(--muted); font-weight: 400; }
+.badge {
+  display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 9px;
+  border-radius: 10px; margin-left: 6px; vertical-align: middle;
+}
+.badge.buy { background: #0d2418; color: var(--green); }
+.badge.wait { background: #241f0d; color: var(--yellow); }
+.badge.gamble { background: #24150d; color: var(--orange); }
+.badge.nogo { background: #1a1a1a; color: var(--grey); }
+.badge.watch { background: #1a1630; color: var(--purple); }
+.badge.hold { background: #0d1a28; color: var(--blue); }
+.badge.unknown { background: #2a1015; color: var(--red); }
+.card.unknown { border-left: 4px solid var(--red); }
+
+.m-hkd { display: none; }
+body.cur-hkd .m-usd { display: none; }
+body.cur-hkd .m-hkd { display: inline; }
+.curtoggle { display: flex; gap: 6px; justify-content: flex-end; margin-bottom: 8px; }
+.curtoggle button {
+  background: var(--card); border: 1px solid var(--border); color: var(--muted);
+  border-radius: 8px; padding: 5px 14px; font-size: 12px; font-weight: 700; cursor: pointer;
+}
+body:not(.cur-hkd) .curtoggle [data-cur="usd"],
+body.cur-hkd .curtoggle [data-cur="hkd"] { color: var(--accent); border-color: var(--accent); }
+@media print { .curtoggle { display: none; } }
+.info .sub { font-size: 11px; color: var(--muted); margin-bottom: 8px; line-height: 1.5; }
+
+.vs {
+  font-size: 12px; background: #151520; border-radius: 6px;
+  padding: 6px 10px; margin-bottom: 8px; color: #c8c8d8; line-height: 1.5;
+}
+.vs .hit { color: var(--green); font-weight: 700; }
+.vs .miss { color: var(--muted); }
+.vs .up { color: var(--green); }
+.vs .down { color: var(--red); }
+
+.prices { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 8px; }
+.pbox { background: #0d0d15; border-radius: 6px; padding: 8px; text-align: center; }
+.pbox .pl { font-size: 10px; color: var(--muted); }
+.pbox .pv { font-size: 15px; font-weight: 700; margin-top: 2px; }
+.pbox.hit { outline: 1px solid var(--green); }
+/* A band you are not allowed to act on today is dimmed, so the boxes can never read as a fresh instruction. */
+.pbox.off { opacity: 0.55; }
+.pbox .ps { font-size: 10px; color: var(--muted); margin-top: 3px; line-height: 1.4; }
+.pbox.hit .ps { color: var(--green); }
+.pos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 8px; }
+.warn { font-size: 11px; color: var(--red); margin-top: 6px; font-weight: 700; }
+.plan {
+  background: #151520; border-radius: 6px; padding: 8px 12px;
+  margin-bottom: 8px; font-size: 13px; line-height: 1.5;
+  border-left: 3px solid var(--orange);
+}
+.plan .plab { font-size: 10px; color: var(--muted); margin-bottom: 2px; }
+.plan .pwhy { font-size: 12px; color: #c8c8d8; margin-top: 4px; }
+table.score.wrap td { white-space: normal; font-size: 12px; vertical-align: top; }
+
+.oneliner {
+  background: #151520; border-radius: 6px; padding: 8px 12px;
+  font-size: 13px; font-weight: 600; color: #fff;
+  border-left: 3px solid var(--accent); line-height: 1.55;
+}
+.cap { font-size: 11px; color: var(--orange); margin-top: 6px; }
+
+.src { font-size: 10px; color: var(--muted); margin-top: 6px; }
+
+.footer {
+  text-align: center; color: var(--muted); font-size: 12px;
+  margin-top: 24px; padding-top: 14px; border-top: 1px solid var(--border);
+}
+.footer .motto { font-size: 14px; font-weight: 700; color: #fff; margin-top: 4px; }
+.footer .disclaimer { font-size: 11px; margin-top: 8px; line-height: 1.5; max-width: 640px; margin-left: auto; margin-right: auto; }
+
+.archive { display: grid; gap: 6px; }
+.archive a { color: var(--accent); text-decoration: none; font-size: 14px; }
+.archive a:hover { text-decoration: underline; }
+.score { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+.score th, .score td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); }
+.score th { color: var(--muted); font-weight: 600; font-size: 11px; }
+.score .up { color: var(--green); }
+.score .down { color: var(--red); }
+
+.alerts { margin-bottom: 14px; }
+.alert {
+  background: #2a1a08; border: 1px solid var(--orange); color: #ffcc80;
+  border-radius: 8px; padding: 8px 12px; font-size: 12px; line-height: 1.5; margin-bottom: 6px;
+}
+.why { font-size: 12px; color: #c8c8d8; margin-bottom: 8px; line-height: 1.5; }
+.fc { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; font-size: 11px; color: var(--muted); background: #0f0f18; border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; margin-bottom: 8px; }
+.fc .ps { flex-basis: 100%; font-size: 10px; color: var(--muted); }
+.fc b { color: #d8d8e8; font-weight: 700; }
+.fc b.up { color: var(--green); }
+.fc b.down { color: var(--red); }
+.todo { font-size: 12px; color: #d8d8e8; background: #10101a; border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; margin-top: 8px; line-height: 1.7; }
+.todo b { display: block; font-size: 11px; color: var(--muted); font-weight: 700; margin-bottom: 2px; }
+.inval { font-size: 11px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
+
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+  @page { margin: 10mm; size: auto; background: #0a0a0f; }
+  html, body {
+    background: #0a0a0f !important;
+    color: #e0e0e0 !important;
+    padding: 0;
+  }
+}
+
+.score .ps { font-size: 10px; color: var(--muted); margin-top: 2px; }
+</style>
+</head>
+<body><div style="max-width:720px;margin:0 auto;padding:10px 16px;font:12px system-ui;color:#8a8aa0">更新於 24/9/2026 22:09:46 · <a style="color:#00e5ff" href="../archive.html">舊日子</a></div>
+<div class="header">
+  <h1>短線報告 · 可分享</h1>
+  <div class="info">2026年9月24日 星期四 · 美股數據 2026-09-24 · 港股數據 2026-09-24 · 呢份無倉位金額／佔比</div>
+  <div class="strategy">玩法：日日重新定，唔長揸 · 一隻股分 3 注買、每跌約 12% 溝一注 · 價位啱＋3 日內冇業績就叫買，技術走勢偏弱照買但會標註 · 賺幾多都照溝 · 單隻 ≤25%（ETF 唔計）、同類 ≤55%、高風險股 ≤15% · 唔斬倉</div>
+</div>
+<div class="alerts"><div class="alert">⚠️ calendar.json 冇港股未來業績日：港股業績把關而家冇作用，記得補日子。</div><div class="alert">⚠️ 美股仲未收市：價錢同結論收市前仲會變。</div></div>
+<div class="mbar">
+<div class="mchip"><div class="l">恐懼/貪婪</div><div class="v" style="color:var(--green)">35 恐懼</div></div>
+  <div class="mchip"><div class="l">恒指</div><div class="v" style="color:var(--red)">24,761 -0.29%</div></div>
+  <div class="mchip"><div class="l">油價 WTI</div><div class="v" style="color:var(--green)">$94.11 +2.12%</div></div>
+  <div class="mchip"><div class="l">VIX</div><div class="v" style="color:var(--red)">15.68 +3.29%</div></div>
+  <div class="mchip"><div class="l">北水</div><div class="v">—</div></div>
+  <div class="mchip"><div class="l">美30Y債息</div><div class="v" style="color:var(--green)">5.392% -0.17%</div></div>
+</div>
+<div class="src">部分數據失敗：1810.HK: Yahoo 1810.HK HTTP 404；0700.HK: Yahoo 0700.HK HTTP 404</div>
+
+
+
+<div class="sec">今日要做（綠＝買／溝 · 橙＝沽／減 · 最多 3 隻）</div>
+<div class="act"><div class="actchip enter"><div class="l">輝達／英偉達</div><div class="v">NVDA 222.63 · 喺買入區，可以落首注</div></div>
+<div class="actchip enter"><div class="l">納指ETF</div><div class="v">QQQ 737.08 · 喺買入區，可以落首注</div></div>
+<div class="actchip enter"><div class="l">TLT</div><div class="v">TLT 80.51 · 喺買入區，可以落首注</div></div></div>
+
+<div class="sec">今日美股候選（機械掃描 · 唔係推介）</div>
+<table class="score wrap">
+  <tr><th>代碼</th><th>現價</th><th>買入區</th><th>溝貨區</th><th>止賺區</th><th>點解入圍</th></tr>
+  <tr>
+        <td><b>U</b><div class="ps">Unity Software Inc.</div></td>
+        <td>US$42.14<div class="ps">現價喺買入區入面</div></td>
+        <td>$41.93-43.42</td>
+        <td>$36.53-37.26</td>
+        <td>$49.43-50.93</td>
+        <td>3個月 +55%、企穩 200 日線、跌返落 20 日線下 1.0%、日波幅 4.5%</td>
+      </tr>
+<tr>
+        <td><b>NOW</b><div class="ps">ServiceNow, Inc.</div></td>
+        <td>US$137.95<div class="ps">現價喺買入區入面</div></td>
+        <td>$136.82-141.68</td>
+        <td>$119.20-121.60</td>
+        <td>$161.30-166.19</td>
+        <td>3個月 +54%、企穩 200 日線、跌返落 20 日線下 0.7%、日波幅 4.1%</td>
+      </tr>
+<tr>
+        <td><b>SNOW</b><div class="ps">Snowflake Inc.</div></td>
+        <td>US$331.63<div class="ps">現價喺買入區入面</div></td>
+        <td>$325.64-337.21</td>
+        <td>$283.69-289.42</td>
+        <td>$383.91-395.54</td>
+        <td>3個月 +47%、企穩 200 日線、貼住 20 日線上 0.3%、日波幅 5.5%</td>
+      </tr>
+<tr>
+        <td><b>MSFT</b><div class="ps">Microsoft Corporation</div></td>
+        <td>US$491.35<div class="ps">要升 3.6% 先到買入區</div></td>
+        <td>$491.67-509.14</td>
+        <td>$428.34-437.00</td>
+        <td>$579.65-597.22</td>
+        <td>3個月 +39%、企穩 200 日線、跌返落 20 日線下 1.6%、日波幅 2.1%</td>
+      </tr>
+<tr>
+        <td><b>REGN</b><div class="ps">Regeneron Pharmaceutic</div></td>
+        <td>US$803.46<div class="ps">現價喺買入區入面</div></td>
+        <td>$791.73-819.86</td>
+        <td>$689.75-703.69</td>
+        <td>$933.41-961.70</td>
+        <td>3個月 +29%、企穩 200 日線、跌返落 20 日線下 0.0%、日波幅 2.2%</td>
+      </tr>
+<tr>
+        <td><b>DELL</b><div class="ps">Dell Technologies Inc.</div></td>
+        <td>US$537.92<div class="ps">現價高過買入區 0.5%</div></td>
+        <td>$516.87-535.24</td>
+        <td>$450.30-459.39</td>
+        <td>$609.37-627.83</td>
+        <td>3個月 +31%、企穩 200 日線、貼住 20 日線上 2.5%、日波幅 5.8%</td>
+      </tr>
+<tr>
+        <td><b>SHOP</b><div class="ps">Shopify Inc.</div></td>
+        <td>US$140.86<div class="ps">現價喺買入區入面</div></td>
+        <td>$136.09-140.92</td>
+        <td>$118.56-120.96</td>
+        <td>$160.44-165.30</td>
+        <td>3個月 +26%、企穩 200 日線、貼住 20 日線上 2.0%、日波幅 5.2%</td>
+      </tr>
+<tr>
+        <td><b>MRK</b><div class="ps">Merck &amp; Company, Inc.</div></td>
+        <td>US$150.36<div class="ps">現價喺買入區入面</div></td>
+        <td>$145.93-151.12</td>
+        <td>$127.13-129.70</td>
+        <td>$172.05-177.26</td>
+        <td>3個月 +25%、企穩 200 日線、貼住 20 日線上 1.5%、日波幅 2.1%</td>
+      </tr>
+<tr>
+        <td><b>XOM</b><div class="ps">ExxonMobil Holdings Co</div></td>
+        <td>US$163.79<div class="ps">現價喺買入區入面</div></td>
+        <td>$159.90-165.58</td>
+        <td>$139.30-142.12</td>
+        <td>$188.51-194.22</td>
+        <td>3個月 +20%、企穩 200 日線、貼住 20 日線上 0.9%、日波幅 2.4%</td>
+      </tr>
+<tr>
+        <td><b>CVX</b><div class="ps">Chevron Corporation</div></td>
+        <td>US$206.76<div class="ps">現價喺買入區入面</div></td>
+        <td>$205.85-213.16</td>
+        <td>$179.33-182.96</td>
+        <td>$242.69-250.04</td>
+        <td>3個月 +21%、企穩 200 日線、跌返落 20 日線下 1.1%、日波幅 2.2%</td>
+      </tr>
+</table>
+<div class="src">掃描 102 隻美股，27 隻過到以下全部條件，排頭 10 位：每日成交 ≥ US$50m · 企穩 200 日線 · 50 日線喺 200 日線之上 · 3 個月正回報 · 距離 52 週高唔超過 35% · 高過 20 日線唔超過 8% · 日波幅 ≥ 2%。價位區係由 20／50 日線同 20 日低位機械計出嚟（溝貨 −12%、止賺 +15%），未經人手核對，亦冇睇過基本面同新聞。呢個係篩選結果，唔係叫你買；要邊隻入正式名單就自己揀。改規則：scan-us.mjs 最上面 CFG。 <b>呢張表嘅揀股邏輯（回落 20 日線）回測比日日照買 -0.8%，即係未贏過隨便買，睇下面「公式準唔準」。</b></div>
+
+<div class="sec">未來兩週日曆</div>
+<div class="cal"><div class="cal-row"><div class="cal-date">09-30</div><div class="cal-type">業績</div><div>MU 業績 · 收市後</div></div></div>
+
+<div class="sec">美股</div>
+<div class="card buy">
+  <div class="logo nvda">NV</div>
+  <div class="info">
+    <div class="title">輝達／英偉達 <span class="ticker">NVDA</span><span class="badge buy">⭐今日：可以買入</span></div>
+    <div class="why">價位啱、短期冇業績、技術走勢企穩、未跌穿失守位。</div>
+    <div class="sub">現價 US$222.63 · 今日 -1.28% · 52週高 US$236.54 · AI晶片霸主</div>
+    <div class="fc"><b>10 日展望</b>
+        <span>中位 <b class="up">+1.28%</b></span>
+        <span>八成機會喺 <b>-6.32%</b> 至 <b>+11.04%</b></span>
+        <span>升嘅機會 <b>56%</b></span>
+        <span>即係大約 US$208.56 至 US$247.20</span>
+        <span class="ps">按呢隻股自己過去 490 個 10 日嘅實際升跌分布（由 2024-09-23），唔係方向預測</span></div>
+    
+    <div class="prices">
+      
+      <div class="pbox hit">
+        <div class="pl">買入區</div>
+        <div class="pv">$218.00-224.00</div>
+        <div class="ps">現價喺區內</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">溝貨區</div>
+        <div class="pv">$200.00-206.00</div>
+        <div class="ps">未跌到 · 未持有，買咗第一注先用到</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">止賺區</div>
+        <div class="pv">$240.00-248.00</div>
+        <div class="ps">未到 · 未持有，唔使理</div>
+      </div>
+    </div>
+    <div class="todo"><b>今日計劃</b><div>今日就可以落首注 US$222.63</div><div>跌到 US$206.00（-7.47%） → 落第二注</div></div>
+    <div class="inval">失守位 US$198.70：收市跌穿就要重新諗值唔值得留，唔係叫你即刻沽（下面最近嘅支撐位）</div>
+    <div class="vs">昨日：可以買 → 今日：可以買入</div>
+    
+    
+    <div class="src">數據 Yahoo · 2026-09-24 14:03 UTC</div>
+  </div>
+</div>
+
+<div class="card wait">
+  <div class="logo sndk">SD</div>
+  <div class="info">
+    <div class="title">SanDisk <span class="ticker">SNDK</span><span class="badge wait">⏳今日：等回落</span></div>
+    <div class="why">未跌返落買入區，等回落。</div>
+    <div class="sub">現價 US$1,773.23 · 今日 -2.39% · 52週高 US$2,354.39 · 快闪记忆体龙头 · 极波动，仓位上限15%</div>
+    <div class="fc"><b>10 日展望</b>
+        <span>中位 <b class="up">+9.99%</b></span>
+        <span>八成機會喺 <b>-13.67%</b> 至 <b>+42.22%</b></span>
+        <span>升嘅機會 <b>70%</b></span>
+        <span>即係大約 US$1,530.74 至 US$2,521.81</span>
+        <span class="ps">按呢隻股自己過去 392 個 10 日嘅實際升跌分布（由 2025-02-13），唔係方向預測</span></div>
+    
+    <div class="prices">
+      
+      <div class="pbox off">
+        <div class="pl">買入區</div>
+        <div class="pv">$1,600.00-1,660.00</div>
+        <div class="ps">貴過買入區 +6.82% · 今日唔買</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">溝貨區</div>
+        <div class="pv">$1,400.00-1,460.00</div>
+        <div class="ps">未跌到 · 未持有，買咗第一注先用到</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">止賺區</div>
+        <div class="pv">$1,900.00-1,970.00</div>
+        <div class="ps">未到 · 未持有，唔使理</div>
+      </div>
+    </div>
+    <div class="todo"><b>今日計劃</b><div>跌返落 US$1,660.00（-6.39%） → 先至入第一注</div></div>
+    <div class="inval">失守位 US$1,325.00：收市跌穿就要重新諗值唔值得留，唔係叫你即刻沽（下面最近嘅支撐位）</div>
+    <div class="vs">昨日：等 → 今日：等回落</div>
+    <div class="cap">高風險股：最多買到佔組合 15%</div>
+    
+    <div class="src">數據 Yahoo · 2026-09-24 14:03 UTC</div>
+  </div>
+</div>
+
+<div class="card buy">
+  <div class="logo qqq">QQ</div>
+  <div class="info">
+    <div class="title">納指ETF <span class="ticker">QQQ</span><span class="badge buy">⭐今日：可以買入</span></div>
+    <div class="why">價位啱、短期冇業績、技術走勢企穩、未跌穿失守位。</div>
+    <div class="sub">現價 US$737.08 · 今日 -0.56% · 52週高 US$748.65 · 一注买晒科技股</div>
+    <div class="fc"><b>10 日展望</b>
+        <span>中位 <b class="up">+0.89%</b></span>
+        <span>八成機會喺 <b>-3.23%</b> 至 <b>+5.15%</b></span>
+        <span>升嘅機會 <b>60%</b></span>
+        <span>即係大約 US$713.30 至 US$775.02</span>
+        <span class="ps">按呢隻股自己過去 490 個 10 日嘅實際升跌分布（由 2024-09-23），唔係方向預測</span></div>
+    
+    <div class="prices">
+      
+      <div class="pbox hit">
+        <div class="pl">買入區</div>
+        <div class="pv">$716.00-726.00</div>
+        <div class="ps">貴過買入區 +1.53%</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">溝貨區</div>
+        <div class="pv">$698.00-708.00</div>
+        <div class="ps">未跌到 · 未持有，買咗第一注先用到</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">止賺區</div>
+        <div class="pv">$756.00-766.00</div>
+        <div class="ps">未到 · 未持有，唔使理</div>
+      </div>
+    </div>
+    <div class="todo"><b>今日計劃</b><div>今日就可以落首注 US$737.08</div><div>跌到 US$708.00（-3.95%） → 落第二注</div></div>
+    <div class="inval">失守位 US$689.50：收市跌穿就要重新諗值唔值得留，唔係叫你即刻沽（下面最近嘅支撐位）</div>
+    <div class="vs">昨日：等 → 今日：可以買入</div>
+    
+    
+    <div class="src">數據 Yahoo · 2026-09-24 14:03 UTC</div>
+  </div>
+</div>
+
+<div class="card wait">
+  <div class="logo mu">MU</div>
+  <div class="info">
+    <div class="title">美光 <span class="ticker">MU</span><span class="badge wait">⏳今日：等回落</span></div>
+    <div class="why">未跌返落買入區，等回落。</div>
+    <div class="sub">現價 US$1,049.38 · 今日 -2.10% · 52週高 US$1,255.00 · AI记忆体龙头</div>
+    <div class="fc"><b>10 日展望</b>
+        <span>中位 <b class="up">+5.07%</b></span>
+        <span>八成機會喺 <b>-11.07%</b> 至 <b>+22.07%</b></span>
+        <span>升嘅機會 <b>64%</b></span>
+        <span>即係大約 US$933.19 至 US$1,281.02</span>
+        <span class="ps">按呢隻股自己過去 490 個 10 日嘅實際升跌分布（由 2024-09-23），唔係方向預測</span></div>
+    
+    <div class="prices">
+      
+      <div class="pbox off">
+        <div class="pl">買入區</div>
+        <div class="pv">$960.00-990.00</div>
+        <div class="ps">貴過買入區 +6.00% · 今日唔買</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">溝貨區</div>
+        <div class="pv">$880.00-905.00</div>
+        <div class="ps">未跌到 · 未持有，買咗第一注先用到</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">止賺區</div>
+        <div class="pv">$1,100.00-1,140.00</div>
+        <div class="ps">未到 · 未持有，唔使理</div>
+      </div>
+    </div>
+    <div class="todo"><b>今日計劃</b><div>跌返落 US$990.00（-5.66%） → 先至入第一注</div></div>
+    <div class="inval">失守位 US$853.60：收市跌穿就要重新諗值唔值得留，唔係叫你即刻沽（原定溝貨價再跌 3%）</div>
+    <div class="vs">昨日：等 → 今日：等回落</div>
+    
+    
+    <div class="src">數據 Yahoo · 2026-09-24 14:03 UTC</div>
+  </div>
+</div>
+
+<div class="card nogo">
+  <div class="logo aapl">AP</div>
+  <div class="info">
+    <div class="title">蘋果 <span class="ticker">AAPL</span><span class="badge nogo">🚫今日：暫時唔買</span></div>
+    <div class="why">名單標咗暫時唔買。</div>
+    <div class="sub">現價 US$336.86 · 今日 -0.05% · 52週高 US$345.34 · iPhone霸主</div>
+    <div class="fc"><b>10 日展望</b>
+        <span>中位 <b class="up">+1.12%</b></span>
+        <span>八成機會喺 <b>-5.40%</b> 至 <b>+7.17%</b></span>
+        <span>升嘅機會 <b>58%</b></span>
+        <span>即係大約 US$318.66 至 US$361.00</span>
+        <span class="ps">按呢隻股自己過去 490 個 10 日嘅實際升跌分布（由 2024-09-23），唔係方向預測</span></div>
+    
+    <div class="prices">
+      
+      <div class="pbox off">
+        <div class="pl">買入區</div>
+        <div class="pv">$288.00-296.00</div>
+        <div class="ps">貴過買入區 +13.80% · 今日唔買</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">溝貨區</div>
+        <div class="pv">$270.00-278.00</div>
+        <div class="ps">未跌到 · 未持有，買咗第一注先用到</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">止賺區</div>
+        <div class="pv">$322.00-330.00</div>
+        <div class="ps">現價已經到 · 未持有，唔使理</div>
+      </div>
+    </div>
+    <div class="todo"><b>今日計劃</b><div>跌返落 US$296.00（-12.13%） → 先至入第一注</div></div>
+    <div class="inval">失守位 US$261.90：收市跌穿就要重新諗值唔值得留，唔係叫你即刻沽（原定溝貨價再跌 3%）</div>
+    <div class="vs">昨日：唔買 → 今日：暫時唔買</div>
+    
+    
+    <div class="src">數據 Yahoo · 2026-09-24 14:03 UTC</div>
+  </div>
+</div>
+
+<div class="card wait">
+  <div class="logo tsla">TS</div>
+  <div class="info">
+    <div class="title">特斯拉 <span class="ticker">TSLA</span><span class="badge wait">⏳今日：唔好追高</span></div>
+    <div class="why">現價貴過買入區上邊 8% 以上，唔好追高。</div>
+    <div class="sub">現價 US$379.12 · 今日 -0.26% · 52週高 US$498.83 · 电动车+机械人+FSD · 仓位上限15%</div>
+    <div class="fc"><b>10 日展望</b>
+        <span>中位 <b class="up">+0.38%</b></span>
+        <span>八成機會喺 <b>-11.61%</b> 至 <b>+15.71%</b></span>
+        <span>升嘅機會 <b>51%</b></span>
+        <span>即係大約 US$335.12 至 US$438.67</span>
+        <span class="ps">按呢隻股自己過去 490 個 10 日嘅實際升跌分布（由 2024-09-23），唔係方向預測</span></div>
+    
+    <div class="prices">
+      
+      <div class="pbox off">
+        <div class="pl">買入區</div>
+        <div class="pv">$318.00-330.00</div>
+        <div class="ps">貴過買入區 +14.88% · 今日唔買</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">溝貨區</div>
+        <div class="pv">$290.00-300.00</div>
+        <div class="ps">未跌到 · 未持有，買咗第一注先用到</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">止賺區</div>
+        <div class="pv">$372.00-384.00</div>
+        <div class="ps">現價已經到 · 未持有，唔使理</div>
+      </div>
+    </div>
+    <div class="todo"><b>今日計劃</b><div>跌返落 US$330.00（-12.96%） → 先至入第一注</div></div>
+    <div class="inval">失守位 US$281.30：收市跌穿就要重新諗值唔值得留，唔係叫你即刻沽（原定溝貨價再跌 3%）</div>
+    <div class="vs">昨日：等 → 今日：唔好追高</div>
+    <div class="cap">高風險股：最多買到佔組合 15%</div>
+    
+    <div class="src">數據 Yahoo · 2026-09-24 14:03 UTC</div>
+  </div>
+</div>
+
+<div class="card wait">
+  <div class="logo pltr">PL</div>
+  <div class="info">
+    <div class="title">Palantir <span class="ticker">PLTR</span><span class="badge wait">⏳今日：唔好追高</span></div>
+    <div class="why">現價貴過買入區上邊 8% 以上，唔好追高。</div>
+    <div class="sub">現價 US$190.16 · 今日 -0.85% · 52週高 US$207.52 · AI数据龙头</div>
+    <div class="fc"><b>10 日展望</b>
+        <span>中位 <b class="up">+3.10%</b></span>
+        <span>八成機會喺 <b>-12.97%</b> 至 <b>+19.14%</b></span>
+        <span>升嘅機會 <b>59%</b></span>
+        <span>即係大約 US$165.49 至 US$226.55</span>
+        <span class="ps">按呢隻股自己過去 490 個 10 日嘅實際升跌分布（由 2024-09-23），唔係方向預測</span></div>
+    
+    <div class="prices">
+      
+      <div class="pbox off">
+        <div class="pl">買入區</div>
+        <div class="pv">$158.00-166.00</div>
+        <div class="ps">貴過買入區 +14.55% · 今日唔買</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">溝貨區</div>
+        <div class="pv">$140.00-148.00</div>
+        <div class="ps">未跌到 · 未持有，買咗第一注先用到</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">止賺區</div>
+        <div class="pv">$196.00-204.00</div>
+        <div class="ps">未到 · 未持有，唔使理</div>
+      </div>
+    </div>
+    <div class="todo"><b>今日計劃</b><div>跌返落 US$166.00（-12.71%） → 先至入第一注</div></div>
+    <div class="inval">失守位 US$131.60：收市跌穿就要重新諗值唔值得留，唔係叫你即刻沽（下面最近嘅支撐位）</div>
+    <div class="vs">昨日：等 → 今日：唔好追高</div>
+    
+    
+    <div class="src">數據 Yahoo · 2026-09-24 14:03 UTC</div>
+  </div>
+</div>
+
+<div class="card wait">
+  <div class="logo spcx">SX</div>
+  <div class="info">
+    <div class="title">SpaceX <span class="ticker">SPCX</span><span class="badge wait">⏳今日：等回落</span></div>
+    <div class="why">未跌返落買入區，等回落。</div>
+    <div class="sub">現價 US$147.08 · 今日 -0.86% · 52週高 US$225.64 · 火箭+星链 · 8/20 解禁已過，下次約 9/10，倉位上限5%</div>
+    
+    
+    <div class="prices">
+      
+      <div class="pbox off">
+        <div class="pl">買入區</div>
+        <div class="pv">$132.00-140.00</div>
+        <div class="ps">貴過買入區 +5.06% · 今日唔買</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">溝貨區</div>
+        <div class="pv">$116.00-124.00</div>
+        <div class="ps">未跌到 · 未持有，買咗第一注先用到</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">止賺區</div>
+        <div class="pv">$156.00-164.00</div>
+        <div class="ps">未到 · 未持有，唔使理</div>
+      </div>
+    </div>
+    <div class="todo"><b>今日計劃</b><div>跌返落 US$140.00（-4.81%） → 先至入第一注</div></div>
+    <div class="inval">失守位 US$107.00：收市跌穿就要重新諗值唔值得留，唔係叫你即刻沽（下面最近嘅支撐位）</div>
+    <div class="vs">昨日：等 → 今日：等回落</div>
+    <div class="cap">高風險股：最多買到佔組合 15%</div>
+    
+    <div class="src">數據 Yahoo · 2026-09-24 14:03 UTC</div>
+  </div>
+</div>
+
+<div class="card buy">
+  <div class="logo tlt">TL</div>
+  <div class="info">
+    <div class="title">TLT <span class="ticker">TLT</span><span class="badge buy">⭐今日：可以買入</span></div>
+    <div class="why">價位啱、短期冇業績；技術走勢偏弱：均線空頭排列、雲下、週線跌、技術分 1（偏空），注碼自己控制。</div>
+    <div class="sub">現價 US$80.51 · 今日 +0.07% · 52週高 US$92.19 · 20年+美債ETF</div>
+    <div class="fc"><b>10 日展望</b>
+        <span>中位 <b class="down">-0.34%</b></span>
+        <span>八成機會喺 <b>-2.87%</b> 至 <b>+2.50%</b></span>
+        <span>升嘅機會 <b>42%</b></span>
+        <span>即係大約 US$78.20 至 US$82.53</span>
+        <span class="ps">按呢隻股自己過去 490 個 10 日嘅實際升跌分布（由 2024-09-23），唔係方向預測</span></div>
+    
+    <div class="prices">
+      
+      <div class="pbox hit">
+        <div class="pl">買入區</div>
+        <div class="pv">$81.50-83.50</div>
+        <div class="ps">平過買入區 -1.21%</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">溝貨區</div>
+        <div class="pv">$74.50-76.50</div>
+        <div class="ps">未跌到 · 未持有，買咗第一注先用到</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">止賺區</div>
+        <div class="pv">$90.00-92.50</div>
+        <div class="ps">未到 · 未持有，唔使理</div>
+      </div>
+    </div>
+    <div class="todo"><b>今日計劃</b><div>今日就可以落首注 US$80.51</div><div>跌到 US$76.50（-4.98%） → 落第二注</div></div>
+    <div class="inval">失守位 US$72.27：收市跌穿就要重新諗值唔值得留，唔係叫你即刻沽（原定溝貨價再跌 3%）</div>
+    <div class="vs">昨日：可以買 → 今日：可以買入</div>
+    
+    
+    <div class="src">數據 Yahoo · 2026-09-24 14:03 UTC</div>
+  </div>
+</div>
+
+<div class="card wait">
+  <div class="logo schd">SC</div>
+  <div class="info">
+    <div class="title">SCHD <span class="ticker">SCHD</span><span class="badge wait">⏳今日：唔好追高</span></div>
+    <div class="why">現價貴過買入區上邊 8% 以上，唔好追高。</div>
+    <div class="sub">現價 US$33.34 · 今日 +0.18% · 52週高 US$35.31 · 美國紅利股ETF</div>
+    <div class="fc"><b>10 日展望</b>
+        <span>中位 <b class="up">+0.72%</b></span>
+        <span>八成機會喺 <b>-2.37%</b> 至 <b>+3.04%</b></span>
+        <span>升嘅機會 <b>60%</b></span>
+        <span>即係大約 US$32.55 至 US$34.36</span>
+        <span class="ps">按呢隻股自己過去 490 個 10 日嘅實際升跌分布（由 2024-09-23），唔係方向預測</span></div>
+    
+    <div class="prices">
+      
+      <div class="pbox off">
+        <div class="pl">買入區</div>
+        <div class="pv">$29.40-30.60</div>
+        <div class="ps">貴過買入區 +8.95% · 今日唔買</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">溝貨區</div>
+        <div class="pv">$27.80-28.80</div>
+        <div class="ps">未跌到 · 未持有，買咗第一注先用到</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">止賺區</div>
+        <div class="pv">$35.00-36.00</div>
+        <div class="ps">未到 · 未持有，唔使理</div>
+      </div>
+    </div>
+    <div class="todo"><b>今日計劃</b><div>跌返落 US$30.60（-8.22%） → 先至入第一注</div></div>
+    <div class="inval">失守位 US$26.97：收市跌穿就要重新諗值唔值得留，唔係叫你即刻沽（原定溝貨價再跌 3%）</div>
+    <div class="vs">昨日：等 → 今日：唔好追高</div>
+    
+    
+    <div class="src">數據 Yahoo · 2026-09-24 14:03 UTC</div>
+  </div>
+</div>
+
+<div class="card wait">
+  <div class="logo dram">DR</div>
+  <div class="info">
+    <div class="title">DRAM <span class="ticker">DRAM</span><span class="badge wait">⏳今日：唔好追高</span></div>
+    <div class="why">現價貴過買入區上邊 8% 以上，唔好追高。</div>
+    <div class="sub">現價 US$60.53 · 今日 -2.21% · 52週高 US$81.34 · Roundhill記憶體ETF · 同 MU 同一舖，唔好再疊 SNDK</div>
+    
+    
+    <div class="prices">
+      
+      <div class="pbox off">
+        <div class="pl">買入區</div>
+        <div class="pv">$44.50-46.50</div>
+        <div class="ps">貴過買入區 +30.17% · 今日唔買</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">溝貨區</div>
+        <div class="pv">$39.00-41.00</div>
+        <div class="ps">未跌到 · 未持有，買咗第一注先用到</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">止賺區</div>
+        <div class="pv">$57.00-59.00</div>
+        <div class="ps">現價已經到 · 未持有，唔使理</div>
+      </div>
+    </div>
+    <div class="todo"><b>今日計劃</b><div>跌返落 US$46.50（-23.18%） → 先至入第一注</div></div>
+    <div class="inval">失守位 US$37.83：收市跌穿就要重新諗值唔值得留，唔係叫你即刻沽（原定溝貨價再跌 3%）</div>
+    <div class="vs">昨日：等 → 今日：唔好追高</div>
+    
+    
+    <div class="src">數據 Yahoo · 2026-09-24 14:03 UTC</div>
+  </div>
+</div>
+
+<div class="card buy">
+  <div class="logo orcl">OR</div>
+  <div class="info">
+    <div class="title">甲骨文 <span class="ticker">ORCL</span><span class="badge buy">⭐今日：可以買入</span></div>
+    <div class="why">價位啱、短期冇業績；技術走勢偏弱：雲下、週線跌、技術分 2.4（偏空），注碼自己控制。</div>
+    <div class="sub">現價 US$133.98 · 今日 -7.32% · 52週高 US$322.54 · 云端+AI</div>
+    <div class="fc"><b>10 日展望</b>
+        <span>中位 <b class="down">-1.06%</b></span>
+        <span>八成機會喺 <b>-12.95%</b> 至 <b>+15.08%</b></span>
+        <span>升嘅機會 <b>46%</b></span>
+        <span>即係大約 US$116.63 至 US$154.19</span>
+        <span class="ps">按呢隻股自己過去 490 個 10 日嘅實際升跌分布（由 2024-09-23），唔係方向預測</span></div>
+    
+    <div class="prices">
+      
+      <div class="pbox hit">
+        <div class="pl">買入區</div>
+        <div class="pv">$142.00-148.00</div>
+        <div class="ps">平過買入區 -5.65%</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">溝貨區</div>
+        <div class="pv">$126.00-132.00</div>
+        <div class="ps">未跌到 · 未持有，買咗第一注先用到</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">止賺區</div>
+        <div class="pv">$165.00-171.00</div>
+        <div class="ps">未到 · 未持有，唔使理</div>
+      </div>
+    </div>
+    <div class="todo"><b>今日計劃</b><div>今日就可以落首注 US$133.98</div><div>跌到 US$132.00（-1.48%） → 落第二注</div></div>
+    <div class="inval">失守位 US$114.50：收市跌穿就要重新諗值唔值得留，唔係叫你即刻沽（下面最近嘅支撐位）</div>
+    <div class="vs">昨日：可以買 → 今日：可以買入</div>
+    
+    
+    <div class="src">數據 Yahoo · 2026-09-24 14:03 UTC</div>
+  </div>
+</div>
+
+<div class="sec">港股</div>
+<div class="card buy">
+  <div class="logo hsbc">滙控</div>
+  <div class="info">
+    <div class="title">(00005) 滙控<span class="badge buy">⭐今日：可以買入</span></div>
+    <div class="why">價位啱、短期冇業績、技術走勢企穩、未跌穿失守位。</div>
+    <div class="sub">現價 HK$156.90 · 今日 -1.63% · 52週高 HK$169.70 · 香港最大银行</div>
+    <div class="fc"><b>10 日展望</b>
+        <span>中位 <b class="up">+2.15%</b></span>
+        <span>八成機會喺 <b>-3.64%</b> 至 <b>+6.73%</b></span>
+        <span>升嘅機會 <b>69%</b></span>
+        <span>即係大約 HK$151.19 至 HK$167.45</span>
+        <span class="ps">按呢隻股自己過去 481 個 10 日嘅實際升跌分布（由 2024-09-23），唔係方向預測</span></div>
+    
+    <div class="prices">
+      
+      <div class="pbox hit">
+        <div class="pl">買入區</div>
+        <div class="pv">$160.00-164.00</div>
+        <div class="ps">平過買入區 -1.94%</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">溝貨區</div>
+        <div class="pv">$150.00-154.00</div>
+        <div class="ps">未跌到 · 未持有，買咗第一注先用到</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">止賺區</div>
+        <div class="pv">$172.00-178.00</div>
+        <div class="ps">未到 · 未持有，唔使理</div>
+      </div>
+    </div>
+    <div class="todo"><b>今日計劃</b><div>今日就可以落首注 HK$156.90</div><div>跌到 HK$154.00（-1.85%） → 落第二注</div></div>
+    <div class="inval">失守位 HK$145.40：收市跌穿就要重新諗值唔值得留，唔係叫你即刻沽（下面最近嘅支撐位）</div>
+    <div class="vs">昨日：可以買 → 今日：可以買入</div>
+    
+    
+    <div class="src">數據 Yahoo · 2026-09-24 08:08 UTC</div>
+  </div>
+</div>
+
+<div class="card unknown">
+  <div class="logo tencent">騰訊</div>
+  <div class="info">
+    <div class="title">(00700) 騰訊<span class="badge unknown">❔今日：今日冇報價</span></div>
+    <div class="why">今日收唔到報價，唔好照住張卡落單。</div>
+    <div class="sub">微信+游戏+AI</div>
+    <div class="fc"><b>10 日展望</b>
+        <span>中位 <b class="down">-0.29%</b></span>
+        <span>八成機會喺 <b>-7.98%</b> 至 <b>+8.39%</b></span>
+        <span>升嘅機會 <b>47%</b></span>
+        
+        <span class="ps">按呢隻股自己過去 481 個 10 日嘅實際升跌分布（由 2024-09-23），唔係方向預測</span></div>
+    
+    <div class="prices">
+      
+      <div class="pbox off">
+        <div class="pl">買入區</div>
+        <div class="pv">$432.00-442.00</div>
+        <div class="ps">冇報價 · 今日唔買</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">溝貨區</div>
+        <div class="pv">$410.00-420.00</div>
+        <div class="ps">未跌到 · 未持有，買咗第一注先用到</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">止賺區</div>
+        <div class="pv">$480.00-492.00</div>
+        <div class="ps">未到 · 未持有，唔使理</div>
+      </div>
+    </div>
+    
+    <div class="inval">失守位 HK$397.70：收市跌穿就要重新諗值唔值得留，唔係叫你即刻沽（原定溝貨價再跌 3%）</div>
+    <div class="vs">昨日：可以買 → 今日：今日冇報價</div>
+    
+    
+    <div class="src">數據 Yahoo</div>
+  </div>
+</div>
+
+<div class="card buy">
+  <div class="logo baba">阿里</div>
+  <div class="info">
+    <div class="title">(09988) 阿里<span class="badge buy">⭐今日：可以買入</span></div>
+    <div class="why">價位啱、短期冇業績；技術走勢偏弱：週線跌、技術分 4.1（微空），注碼自己控制。</div>
+    <div class="sub">現價 HK$110.00 · 今日 +0.18% · 52週高 HK$186.20 · 淘宝+AI大模型 · 8/20 已放榜：收入+9%，利潤受壓</div>
+    <div class="fc"><b>10 日展望</b>
+        <span>中位 <b class="down">-1.54%</b></span>
+        <span>八成機會喺 <b>-10.89%</b> 至 <b>+15.29%</b></span>
+        <span>升嘅機會 <b>44%</b></span>
+        <span>即係大約 HK$98.02 至 HK$126.82</span>
+        <span class="ps">按呢隻股自己過去 481 個 10 日嘅實際升跌分布（由 2024-09-23），唔係方向預測</span></div>
+    
+    <div class="prices">
+      
+      <div class="pbox hit">
+        <div class="pl">買入區</div>
+        <div class="pv">$116.00-120.00</div>
+        <div class="ps">平過買入區 -5.17%</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">溝貨區</div>
+        <div class="pv">$108.00-112.00</div>
+        <div class="ps">現價已經跌到 · 未持有，買咗第一注先用到</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">止賺區</div>
+        <div class="pv">$135.00-140.00</div>
+        <div class="ps">未到 · 未持有，唔使理</div>
+      </div>
+    </div>
+    <div class="todo"><b>今日計劃</b><div>今日就可以落首注 HK$110.00</div><div>跌到 HK$112.00（+1.82%） → 落第二注</div></div>
+    <div class="inval">失守位 HK$106.50：收市跌穿就要重新諗值唔值得留，唔係叫你即刻沽（下面最近嘅支撐位）</div>
+    <div class="vs">昨日：可以買 → 今日：可以買入</div>
+    
+    
+    <div class="src">數據 Yahoo · 2026-09-24 08:08 UTC</div>
+  </div>
+</div>
+
+<div class="card wait">
+  <div class="logo aia">友邦</div>
+  <div class="info">
+    <div class="title">(01299) 友邦<span class="badge wait">⏳今日：等回落</span></div>
+    <div class="why">未跌返落買入區，等回落。</div>
+    <div class="sub">現價 HK$75.80 · 今日 +0.60% · 52週高 HK$92.15 · 保险龙头 · 8/20 已放榜：NBV+10%，內地+20%</div>
+    <div class="fc"><b>10 日展望</b>
+        <span>中位 <b class="up">+0.41%</b></span>
+        <span>八成機會喺 <b>-6.60%</b> 至 <b>+7.80%</b></span>
+        <span>升嘅機會 <b>55%</b></span>
+        <span>即係大約 HK$70.80 至 HK$81.71</span>
+        <span class="ps">按呢隻股自己過去 481 個 10 日嘅實際升跌分布（由 2024-09-23），唔係方向預測</span></div>
+    
+    <div class="prices">
+      
+      <div class="pbox off">
+        <div class="pl">買入區</div>
+        <div class="pv">$70.00-72.50</div>
+        <div class="ps">貴過買入區 +4.55% · 今日唔買</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">溝貨區</div>
+        <div class="pv">$64.00-67.00</div>
+        <div class="ps">未跌到 · 未持有，買咗第一注先用到</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">止賺區</div>
+        <div class="pv">$80.00-83.00</div>
+        <div class="ps">未到 · 未持有，唔使理</div>
+      </div>
+    </div>
+    <div class="todo"><b>今日計劃</b><div>跌返落 HK$72.50（-4.35%） → 先至入第一注</div></div>
+    <div class="inval">失守位 HK$62.08：收市跌穿就要重新諗值唔值得留，唔係叫你即刻沽（原定溝貨價再跌 3%）</div>
+    <div class="vs">昨日：等 → 今日：等回落</div>
+    
+    
+    <div class="src">數據 Yahoo · 2026-09-24 08:08 UTC</div>
+  </div>
+</div>
+
+<div class="card wait">
+  <div class="logo ccb">建行</div>
+  <div class="info">
+    <div class="title">(00939) 建行<span class="badge wait">⏳今日：唔好追高</span></div>
+    <div class="why">現價貴過買入區上邊 8% 以上，唔好追高。</div>
+    <div class="sub">現價 HK$9.68 · 今日 +0.21% · 52週高 HK$9.90 · 国企大行 · 8/28 业绩</div>
+    <div class="fc"><b>10 日展望</b>
+        <span>中位 <b class="up">+1.05%</b></span>
+        <span>八成機會喺 <b>-4.34%</b> 至 <b>+6.49%</b></span>
+        <span>升嘅機會 <b>59%</b></span>
+        <span>即係大約 HK$9.26 至 HK$10.31</span>
+        <span class="ps">按呢隻股自己過去 481 個 10 日嘅實際升跌分布（由 2024-09-23），唔係方向預測</span></div>
+    
+    <div class="prices">
+      
+      <div class="pbox off">
+        <div class="pl">買入區</div>
+        <div class="pv">$8.60-8.80</div>
+        <div class="ps">貴過買入區 +10.00% · 今日唔買</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">溝貨區</div>
+        <div class="pv">$8.20-8.40</div>
+        <div class="ps">未跌到 · 未持有，買咗第一注先用到</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">止賺區</div>
+        <div class="pv">$9.10-9.30</div>
+        <div class="ps">現價已經到 · 未持有，唔使理</div>
+      </div>
+    </div>
+    <div class="todo"><b>今日計劃</b><div>跌返落 HK$8.80（-9.09%） → 先至入第一注</div></div>
+    <div class="inval">失守位 HK$7.95：收市跌穿就要重新諗值唔值得留，唔係叫你即刻沽（原定溝貨價再跌 3%）</div>
+    <div class="vs">昨日：等 → 今日：唔好追高</div>
+    
+    
+    <div class="src">數據 Yahoo · 2026-09-24 08:08 UTC</div>
+  </div>
+</div>
+
+<div class="sec">觀察（唔係叫買）</div>
+<div class="card watch-card">
+  <div class="logo smic">中芯</div>
+  <div class="info">
+    <div class="title">(00981) 中芯國際<span class="badge watch">👀今日：淨係觀望</span></div>
+    <div class="why">名單上面淨係觀望，唔開新倉。</div>
+    <div class="sub">現價 HK$63.80 · 今日 +0.00% · 52週高 HK$93.50 · 国产晶片代工龙头</div>
+    <div class="fc"><b>10 日展望</b>
+        <span>中位 <b class="up">+1.32%</b></span>
+        <span>八成機會喺 <b>-10.88%</b> 至 <b>+19.02%</b></span>
+        <span>升嘅機會 <b>55%</b></span>
+        <span>即係大約 HK$56.86 至 HK$75.93</span>
+        <span class="ps">按呢隻股自己過去 481 個 10 日嘅實際升跌分布（由 2024-09-23），唔係方向預測</span></div>
+    
+    <div class="prices">
+      
+      <div class="pbox off">
+        <div class="pl">買入區</div>
+        <div class="pv">$64.00-66.50</div>
+        <div class="ps">平過買入區 -0.31% · 今日唔買</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">溝貨區</div>
+        <div class="pv">$58.00-61.00</div>
+        <div class="ps">未跌到 · 未持有，買咗第一注先用到</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">止賺區</div>
+        <div class="pv">—</div>
+        <div class="ps">冇設，爆上都唔追 · 未持有，唔使理</div>
+      </div>
+    </div>
+    
+    <div class="inval">失守位 HK$56.26：收市跌穿就要重新諗值唔值得留，唔係叫你即刻沽（原定溝貨價再跌 3%）</div>
+    <div class="vs">昨日：觀望 → 今日：淨係觀望</div>
+    
+    
+    <div class="src">數據 Yahoo · 2026-09-24 08:08 UTC</div>
+  </div>
+</div>
+
+<div class="card unknown">
+  <div class="logo xiaomi">小米</div>
+  <div class="info">
+    <div class="title">(01810) 小米<span class="badge unknown">❔今日：今日冇報價</span></div>
+    <div class="why">今日收唔到報價，唔好照住張卡落單。</div>
+    <div class="sub">手机+电车+AI · 8/18 已放榜</div>
+    <div class="fc"><b>10 日展望</b>
+        <span>中位 <b class="up">+0.06%</b></span>
+        <span>八成機會喺 <b>-10.18%</b> 至 <b>+13.04%</b></span>
+        <span>升嘅機會 <b>50%</b></span>
+        
+        <span class="ps">按呢隻股自己過去 481 個 10 日嘅實際升跌分布（由 2024-09-23），唔係方向預測</span></div>
+    
+    <div class="prices">
+      
+      <div class="pbox off">
+        <div class="pl">買入區</div>
+        <div class="pv">$24.00-25.50</div>
+        <div class="ps">冇報價 · 今日唔買</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">溝貨區</div>
+        <div class="pv">$22.00-23.20</div>
+        <div class="ps">未跌到 · 未持有，買咗第一注先用到</div>
+      </div>
+      
+      <div class="pbox off">
+        <div class="pl">止賺區</div>
+        <div class="pv">—</div>
+        <div class="ps">冇設，爆上都唔追 · 未持有，唔使理</div>
+      </div>
+    </div>
+    
+    <div class="inval">失守位 HK$21.30：收市跌穿就要重新諗值唔值得留，唔係叫你即刻沽（下面最近嘅支撐位）</div>
+    <div class="vs">昨日：觀望 → 今日：今日冇報價</div>
+    
+    
+    <div class="src">數據 Yahoo</div>
+  </div>
+</div>
+<div class="footer">
+  每日更新 · 美股 + 港股
+  <div class="motto">分注 · 對照昨日 · 坐住等帶</div>
+  <div class="disclaimer">個人筆記，唔係投資建議。買入區／溝貨區／止賺區係按規則計出嚟嘅參考價。價格來自 Yahoo Finance，恐懼/貪婪來自 CNN，北水來自東方財富（能拉到先顯示）。可能有延遲或錯價。</div>
+</div>
+
+</body>
+</html>
